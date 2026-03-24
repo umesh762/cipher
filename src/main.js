@@ -362,6 +362,14 @@ gsap.registerPlugin(ScrollTrigger);
     // Navbar shrink
     window.addEventListener("scroll", () => {
       const navbar = document.getElementById("navbar");
+      if (!navbar) {
+        return;
+      }
+      // Prevent jumpy layout shifts on mobile while browser chrome expands/collapses.
+      if (isTouch) {
+        navbar.classList.remove("shrink");
+        return;
+      }
       if (window.scrollY > 50) {
         navbar.classList.add("shrink");
       } else {
@@ -518,12 +526,16 @@ gsap.registerPlugin(ScrollTrigger);
       const spacing = () => (window.innerWidth <= 768 ? 132 : 190);
       let activeIndex = 0;
       let intervalId;
+      let resumeTimerId;
       let isHovering = false;
       let touchStartX = 0;
       let touchStartY = 0;
       let isDragging = false;
       let dragStartX = 0;
       let lastManualRotateAt = 0;
+      const AUTO_ROTATE_MS = 1400;
+      const MANUAL_COOLDOWN_MS = 260;
+      const RESUME_AFTER_MANUAL_MS = 920;
 
       function applyLayout() {
         const total = cards.length;
@@ -563,24 +575,35 @@ gsap.registerPlugin(ScrollTrigger);
 
       function canManualRotate() {
         const now = Date.now();
-        if (now - lastManualRotateAt < 420) {
+        if (now - lastManualRotateAt < MANUAL_COOLDOWN_MS) {
           return false;
         }
         lastManualRotateAt = now;
         return true;
       }
 
-      function startAutoRotate() {
+      function startAutoRotate(immediate = true) {
         clearInterval(intervalId);
+        clearTimeout(resumeTimerId);
         if (isHovering) {
           return;
         }
-        intervalId = setInterval(rotateNext, 1650);
+        if (immediate) {
+          intervalId = setInterval(rotateNext, AUTO_ROTATE_MS);
+          return;
+        }
+        resumeTimerId = setTimeout(() => {
+          if (isHovering) {
+            return;
+          }
+          intervalId = setInterval(rotateNext, AUTO_ROTATE_MS);
+        }, RESUME_AFTER_MANUAL_MS);
       }
 
       carousel.addEventListener("mouseenter", () => {
         isHovering = true;
         clearInterval(intervalId);
+        clearTimeout(resumeTimerId);
       });
 
       carousel.addEventListener("mouseleave", () => {
@@ -599,7 +622,7 @@ gsap.registerPlugin(ScrollTrigger);
           return;
         }
         const dx = e.clientX - dragStartX;
-        if (Math.abs(dx) >= 48 && canManualRotate()) {
+        if (Math.abs(dx) >= 30 && canManualRotate()) {
           if (dx < 0) {
             rotateNext();
           } else {
@@ -608,7 +631,7 @@ gsap.registerPlugin(ScrollTrigger);
         }
         isDragging = false;
         carousel.classList.remove("is-dragging");
-        startAutoRotate();
+        startAutoRotate(false);
       });
 
       carousel.addEventListener("wheel", (e) => {
@@ -621,7 +644,7 @@ gsap.registerPlugin(ScrollTrigger);
           return;
         }
         const axisDelta = e.deltaX;
-        if (Math.abs(axisDelta) < 8) {
+        if (Math.abs(axisDelta) < 5) {
           return;
         }
         if (axisDelta > 0) {
@@ -629,7 +652,7 @@ gsap.registerPlugin(ScrollTrigger);
         } else {
           rotatePrev();
         }
-        startAutoRotate();
+        startAutoRotate(false);
       }, { passive: false });
 
       carousel.addEventListener("touchstart", (e) => {
@@ -648,7 +671,7 @@ gsap.registerPlugin(ScrollTrigger);
         }
         const dx = t.clientX - touchStartX;
         const dy = t.clientY - touchStartY;
-        if (Math.abs(dx) < 36 || Math.abs(dx) < Math.abs(dy)) {
+        if (Math.abs(dx) < 26 || Math.abs(dx) < Math.abs(dy)) {
           return;
         }
         if (!canManualRotate()) {
@@ -659,7 +682,7 @@ gsap.registerPlugin(ScrollTrigger);
         } else {
           rotatePrev();
         }
-        startAutoRotate();
+        startAutoRotate(false);
       }, { passive: true });
 
       window.addEventListener("resize", applyLayout);
@@ -673,35 +696,55 @@ gsap.registerPlugin(ScrollTrigger);
     // Form particle burst and success
     const joinForm = document.getElementById("join-form");
     const successMessage = document.getElementById("success-message");
-    joinForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const button = joinForm.querySelector(".submit-btn");
-      const rect = button.getBoundingClientRect();
-      for (let p = 0; p < 20; p += 1) {
-        const particle = document.createElement("div");
-        particle.style.position = "fixed";
-        particle.style.width = "4px";
-        particle.style.height = "4px";
-        particle.style.borderRadius = "50%";
-        particle.style.pointerEvents = "none";
-        particle.style.background = ["#C9972A", "#FFD700", "#1B5FAA", "#F0E6D3"][Math.floor(Math.random() * 4)];
-        particle.style.left = rect.left + rect.width / 2 + "px";
-        particle.style.top = rect.top + rect.height / 2 + "px";
-        document.body.appendChild(particle);
-        gsap.to(particle, {
-          x: (Math.random() - 0.5) * 300,
-          y: (Math.random() - 0.5) * 300,
-          opacity: 0,
-          duration: 0.6 + Math.random() * 0.2,
-          ease: "power2.out",
-          onComplete: () => particle.remove()
-        });
-      }
+    if (joinForm && successMessage) {
+      joinForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const button = joinForm.querySelector(".submit-btn");
+        if (!button) {
+          return;
+        }
+        const rect = button.getBoundingClientRect();
+        for (let p = 0; p < 20; p += 1) {
+          const particle = document.createElement("div");
+          particle.style.position = "fixed";
+          particle.style.width = "4px";
+          particle.style.height = "4px";
+          particle.style.borderRadius = "50%";
+          particle.style.pointerEvents = "none";
+          particle.style.background = ["#C9972A", "#FFD700", "#1B5FAA", "#F0E6D3"][Math.floor(Math.random() * 4)];
+          particle.style.left = rect.left + rect.width / 2 + "px";
+          particle.style.top = rect.top + rect.height / 2 + "px";
+          document.body.appendChild(particle);
+          gsap.to(particle, {
+            x: (Math.random() - 0.5) * 300,
+            y: (Math.random() - 0.5) * 300,
+            opacity: 0,
+            duration: 0.6 + Math.random() * 0.2,
+            ease: "power2.out",
+            onComplete: () => particle.remove()
+          });
+        }
 
-      setTimeout(() => {
-        joinForm.style.display = "none";
-        successMessage.style.opacity = "1";
-      }, 800);
+        setTimeout(() => {
+          joinForm.style.display = "none";
+          successMessage.style.opacity = "1";
+        }, 800);
+      });
+    }
+
+    // FAQ behaves like an accordion: keep only one answer open.
+    const faqItems = Array.from(document.querySelectorAll("#join .faq-item"));
+    faqItems.forEach((item) => {
+      item.addEventListener("toggle", () => {
+        if (!item.open) {
+          return;
+        }
+        faqItems.forEach((other) => {
+          if (other !== item) {
+            other.removeAttribute("open");
+          }
+        });
+      });
     });
 
     // Scroll animations
