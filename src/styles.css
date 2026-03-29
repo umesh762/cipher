@@ -1530,7 +1530,7 @@
     .team-carousel {
       position: relative;
       margin-top: 3rem;
-      height: 370px;
+      height: 600px;
       perspective: 1400px;
       overflow: visible;
       user-select: none;
@@ -1539,10 +1539,15 @@
 
     .team-track {
       position: relative;
-      width: min(980px, 100%);
+      width: min(1140px, 100%);
       height: 100%;
       margin: 0 auto;
       touch-action: pan-y;
+    }
+
+    .team-summary-card {
+      width: clamp(228px, 24vw, 286px);
+      min-height: 236px;
     }
 
     .team-card {
@@ -1558,10 +1563,23 @@
       text-align: center;
       overflow: hidden;
       border-radius: 10px;
-      transition: transform 0.56s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.46s ease, filter 0.46s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+      transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s ease, filter 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
       transform-style: preserve-3d;
       will-change: transform, opacity;
       cursor: pointer;
+    }
+
+    .team-card-face {
+      position: relative;
+      width: 100%;
+      min-height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.4s cubic-bezier(0.2, 0.75, 0.25, 1);
+      will-change: transform;
+    }
+
+    .team-card.is-flipped .team-card-face {
+      transform: rotateY(180deg);
     }
 
     .team-carousel.is-dragging,
@@ -1638,6 +1656,83 @@
       font-size: 0.85rem;
       color: var(--gold);
       letter-spacing: 1px;
+    }
+
+    .team-size {
+      display: inline-flex;
+      margin-top: 0.8rem;
+      font-family: "Share Tech Mono", monospace;
+      font-size: 0.66rem;
+      letter-spacing: 1.6px;
+      color: var(--cream);
+      border: 1px solid rgba(240, 230, 211, 0.28);
+      background: rgba(240, 230, 211, 0.07);
+      border-radius: 999px;
+      padding: 4px 9px;
+    }
+
+    .team-members-stage {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 220;
+      overflow: visible;
+    }
+
+    .team-card.member-card {
+      width: clamp(178px, 18.5vw, 228px);
+      min-height: 182px;
+      padding: 1.2rem 0.85rem;
+      opacity: 0;
+      border-radius: 10px;
+      box-shadow:
+        0 16px 28px rgba(5, 13, 24, 0.45),
+        0 0 24px rgba(201, 151, 42, 0.16);
+      transform: translate(-50%, -50%);
+    }
+
+    .team-card.member-card.lead {
+      width: clamp(190px, 19vw, 238px);
+      min-height: 192px;
+    }
+
+    .team-card.member-card .avatar {
+      width: 62px;
+      height: 62px;
+      margin-bottom: 0.9rem;
+      font-size: 1.05rem;
+    }
+
+    .team-card.member-card h4 {
+      font-size: 0.86rem;
+      line-height: 1.35;
+      min-height: 2.35em;
+    }
+
+    .team-card.member-card p {
+      font-size: 0.72rem;
+      letter-spacing: 1.2px;
+    }
+
+    .team-card.member-card.lead {
+      border-color: rgba(255, 215, 0, 0.85);
+      box-shadow:
+        0 18px 34px rgba(5, 13, 24, 0.5),
+        0 0 32px rgba(255, 215, 0, 0.26);
+      background:
+        radial-gradient(circle at 18% 16%, rgba(255, 215, 0, 0.18), transparent 38%),
+        linear-gradient(165deg, rgba(18, 38, 64, 0.98), rgba(9, 18, 33, 0.94));
+    }
+
+    .team-card.member-card.lead .avatar {
+      border-color: rgba(255, 215, 0, 0.85);
+      box-shadow: 0 0 24px rgba(255, 215, 0, 0.35), inset 0 0 14px rgba(255, 215, 0, 0.25);
+    }
+
+    .team-card.is-suppressed {
+      opacity: 0 !important;
+      pointer-events: none;
+      filter: blur(1.2px) saturate(0.75);
     }
 
     .team-card::after {
@@ -1753,12 +1848,42 @@
 
     @media (max-width: 768px) {
       .team-carousel {
-        height: 320px;
+        height: 500px;
       }
 
       .team-card {
         width: clamp(185px, 62vw, 230px);
         min-height: 195px;
+      }
+
+      .team-summary-card {
+        width: clamp(196px, 68vw, 236px);
+        min-height: 202px;
+      }
+
+      .team-card.member-card {
+        width: clamp(138px, 42vw, 170px);
+        min-height: 150px;
+        padding: 1rem 0.65rem;
+      }
+
+      .team-card.member-card.lead {
+        width: clamp(148px, 45vw, 182px);
+        min-height: 160px;
+      }
+
+      .team-card.member-card .avatar {
+        width: 52px;
+        height: 52px;
+      }
+
+      .team-card.member-card h4 {
+        font-size: 0.72rem;
+      }
+
+      .team-card.member-card p {
+        font-size: 0.64rem;
+        letter-spacing: 0.8px;
       }
     }
 
@@ -2571,6 +2696,6 @@
       }
 
       .team-carousel {
-        height: 336px;
+        height: 480px;
       }
     }

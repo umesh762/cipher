@@ -391,6 +391,54 @@ gsap.registerPlugin(ScrollTrigger);
     const allNavLinks = document.querySelectorAll('.nav-links a, .mobile-menu a');
     const desktopNavLinks = document.querySelectorAll('.nav-links a');
 
+    function scrollToSection(targetSection, withReveal = false) {
+      if (!targetSection) {
+        return;
+      }
+      const navbar = document.getElementById("navbar");
+      const offset = (navbar ? navbar.offsetHeight : 0) + 18;
+      const targetTop = targetSection.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top: targetTop, behavior: "smooth" });
+
+      if (!withReveal) {
+        return;
+      }
+
+      const sectionHeading = targetSection.querySelector(".section-heading");
+      if (!sectionHeading) {
+        return;
+      }
+
+      gsap.fromTo(sectionHeading, {
+        y: 18,
+        opacity: 0.45,
+        filter: "drop-shadow(0 0 0 rgba(201, 151, 42, 0))"
+      }, {
+        y: 0,
+        opacity: 1,
+        filter: "drop-shadow(0 0 12px rgba(201, 151, 42, 0.35))",
+        duration: 0.65,
+        ease: "power2.out",
+        delay: 0.12,
+        clearProps: "filter"
+      });
+    }
+
+    const exploreBtn = document.getElementById("explore-btn");
+    const joinBtn = document.getElementById("join-btn");
+
+    if (exploreBtn) {
+      exploreBtn.addEventListener("click", () => {
+        scrollToSection(document.getElementById("about"), true);
+      });
+    }
+
+    if (joinBtn) {
+      joinBtn.addEventListener("click", () => {
+        scrollToSection(document.querySelector("footer"), true);
+      });
+    }
+
     allNavLinks.forEach((link) => {
       link.addEventListener("click", (e) => {
         const href = link.getAttribute("href") || "";
@@ -403,10 +451,7 @@ gsap.registerPlugin(ScrollTrigger);
         }
 
         e.preventDefault();
-        const navbar = document.getElementById("navbar");
-        const offset = (navbar ? navbar.offsetHeight : 0) + 18;
-        const targetTop = targetSection.getBoundingClientRect().top + window.scrollY - offset;
-        window.scrollTo({ top: targetTop, behavior: "smooth" });
+        scrollToSection(targetSection);
       });
     });
 
@@ -518,24 +563,155 @@ gsap.registerPlugin(ScrollTrigger);
         return;
       }
 
-      const cards = Array.from(carousel.querySelectorAll(".team-card"));
-      if (cards.length < 2) {
+      const track = carousel.querySelector(".team-track");
+      if (!track) {
         return;
       }
 
+      const teams = [
+        {
+          key: "core",
+          name: "CORE TEAM",
+          lead: "MAYANK DANTRE",
+          members: [
+            { name: "MAYANK DANTRE", role: "PRESIDENT", lead: true },
+            { name: "NEHA HIDDUGGI", role: "SECRETARY" },
+            { name: "ASHITOSH WAGHMARE", role: "TREASURER" }
+          ]
+        },
+        {
+          key: "tech",
+          name: "TECH TEAM",
+          lead: "ZAKI SHAHPURE",
+          members: [
+            { name: "ZAKI SHAHPURE", role: "TEAM LEAD", lead: true },
+            { name: "VEDANT DESAI", role: "MEMBER" },
+            { name: "KHUSHI ROONGTA", role: "MEMBER" },
+            { name: "UMESH KUYATE", role: "MEMBER" },
+            { name: "OMKAR DESHMUKH", role: "MEMBER" },
+            { name: "ANUSHKA SHAW", role: "MEMBER" }
+          ]
+        },
+        {
+          key: "design",
+          name: "DESIGN TEAM",
+          lead: "SHREYA DHAMANKAR",
+          members: [
+            { name: "SHREYA DHAMANKAR", role: "TEAM LEAD", lead: true },
+            { name: "SHREYASH NICHIT", role: "MEMBER" },
+            { name: "KIRTEE PIMPALSHENDE", role: "MEMBER" },
+            { name: "NUTAN WARKE", role: "MEMBER" },
+            { name: "SYED WASAM AHMAD IRSHAD AHMAD", role: "MEMBER" }
+          ]
+        },
+        {
+          key: "pr",
+          name: "PR TEAM",
+          lead: "PAYAL DESALE",
+          members: [
+            { name: "PAYAL DESALE", role: "TEAM LEAD", lead: true },
+            { name: "DHANASHRI MANE", role: "MEMBER" },
+            { name: "PRATHAMESH TIRPUDE", role: "MEMBER" },
+            { name: "SHIVSHREE SHINDE", role: "MEMBER" },
+            { name: "PREETISH KHANDELWAL", role: "MEMBER" }
+          ]
+        },
+        {
+          key: "social",
+          name: "SOCIAL MEDIA TEAM",
+          lead: "YASH DESHPANDE",
+          members: [
+            { name: "YASH DESHPANDE", role: "TEAM LEAD", lead: true },
+            { name: "TEJAS NAIR", role: "MEMBER" },
+            { name: "SAHIL TADAVI", role: "MEMBER" },
+            { name: "HIMANSHU RATHI", role: "MEMBER" }
+          ]
+        },
+        {
+          key: "sports",
+          name: "SPORTS TEAM",
+          lead: "KARUNYA BHATWALKAR",
+          members: [
+            { name: "KARUNYA BHATWALKAR", role: "TEAM LEAD", lead: true },
+            { name: "SHREYASH KADAM", role: "MEMBER" },
+            { name: "ANJALI BEHARE", role: "MEMBER" },
+            { name: "TEJASKUMAR WAGHMODE", role: "MEMBER" },
+            { name: "SAYALI SANDUR", role: "MEMBER" }
+          ]
+        },
+        {
+          key: "management",
+          name: "MANAGEMENT TEAM",
+          lead: "HARDAVI MANGAR",
+          members: [
+            { name: "HARDAVI MANGAR", role: "TEAM LEAD", lead: true },
+            { name: "ASMITA SHIRKE", role: "MEMBER" },
+            { name: "YASH SALUNKE", role: "MEMBER" },
+            { name: "TEJASWINI VAIDYA", role: "MEMBER" },
+            { name: "SIYA SINGHANIYA", role: "MEMBER" },
+            { name: "VEDANT KINDRE", role: "MEMBER" },
+            { name: "LOKESH DHAKAD", role: "MEMBER" }
+          ]
+        }
+      ];
+
+      function getInitials(name) {
+        return name
+          .split(/\s+/)
+          .filter(Boolean)
+          .slice(0, 2)
+          .map((part) => part[0])
+          .join("");
+      }
+
+      function teamSigil(name) {
+        return name
+          .split(" ")
+          .filter((part) => part && part !== "TEAM")
+          .map((part) => part[0])
+          .join("")
+          .slice(0, 3);
+      }
+
+      function renderTeamCard(team) {
+        const card = document.createElement("article");
+        card.className = `team-card team-summary-card${team.key === "core" ? " president-card" : ""}`;
+        card.innerHTML = `
+          <div class="corner-burst left" aria-hidden="true"></div>
+          <div class="corner-burst right" aria-hidden="true"></div>
+          <div class="team-card-face">
+            ${team.key === "core" ? '<div class="president-ribbon">CORE TEAM</div>' : ""}
+            <div class="avatar">${teamSigil(team.name)}</div>
+            <h4>${team.name}</h4>
+            <p>&gt; ${team.lead} · LEAD</p>
+            <span class="team-size">${team.members.length} MEMBERS</span>
+          </div>
+        `;
+        return card;
+      }
+
+      track.innerHTML = "";
+      const cards = teams.map((team) => {
+        const card = renderTeamCard(team);
+        track.appendChild(card);
+        return card;
+      });
+
+      const membersStage = document.createElement("div");
+      membersStage.className = "team-members-stage";
+      track.appendChild(membersStage);
+
       const spacing = () => (window.innerWidth <= 768 ? 132 : 190);
       let activeIndex = 0;
-      let intervalId;
-      let resumeTimerId;
-      let isHovering = false;
       let touchStartX = 0;
       let touchStartY = 0;
       let isDragging = false;
       let dragStartX = 0;
       let lastManualRotateAt = 0;
-      const AUTO_ROTATE_MS = 1400;
-      const MANUAL_COOLDOWN_MS = 260;
-      const RESUME_AFTER_MANUAL_MS = 920;
+      let cycleTimerId;
+      let isBusy = false;
+      const MANUAL_COOLDOWN_MS = 60;
+      const VISIBLE_DEPTH = 1;
 
       function applyLayout() {
         const total = cards.length;
@@ -549,16 +725,31 @@ gsap.registerPlugin(ScrollTrigger);
           }
 
           const distance = Math.abs(relative);
-          const x = relative * spacing();
-          const y = distance * 12;
-          const z = -distance * 120;
-          const scale = relative === 0 ? 1.06 : Math.max(0.72, 1 - distance * 0.14);
-          const rotateY = -relative * 16;
-          const opacity = Math.max(0.22, 1 - distance * 0.24);
+          const mobile = window.innerWidth <= 768;
+          const sideX = mobile ? spacing() : 265;
+          const sideY = mobile ? 36 : 44;
+          const hiddenX = mobile ? 290 : 430;
+
+          if (distance > VISIBLE_DEPTH) {
+            card.style.transform = `translate3d(calc(-50% + ${relative < 0 ? -hiddenX : hiddenX}px), calc(-50% + ${sideY + 28}px), -250px) rotateY(${relative < 0 ? 22 : -22}deg) scale(0.56)`;
+            card.style.opacity = "0";
+            card.style.zIndex = "1";
+            card.style.pointerEvents = "none";
+            card.classList.remove("is-active");
+            return;
+          }
+
+          const x = relative === 0 ? 0 : (relative < 0 ? -sideX : sideX);
+          const y = relative === 0 ? (mobile ? -10 : -14) : sideY;
+          const z = relative === 0 ? 30 : -120;
+          const scale = relative === 0 ? (mobile ? 1.1 : 1.18) : (mobile ? 0.74 : 0.79);
+          const rotateY = relative === 0 ? 0 : (relative < 0 ? 17 : -17);
+          const opacity = relative === 0 ? 1 : 0.36;
 
           card.style.transform = `translate3d(calc(-50% + ${x}px), calc(-50% + ${y}px), ${z}px) rotateY(${rotateY}deg) scale(${scale})`;
           card.style.opacity = String(opacity);
-          card.style.zIndex = String(90 - distance);
+          card.style.zIndex = String(relative === 0 ? 120 : 70 - distance);
+          card.style.pointerEvents = distance <= VISIBLE_DEPTH ? "auto" : "none";
           card.classList.toggle("is-active", relative === 0);
         });
       }
@@ -582,36 +773,179 @@ gsap.registerPlugin(ScrollTrigger);
         return true;
       }
 
-      function startAutoRotate(immediate = true) {
-        clearInterval(intervalId);
-        clearTimeout(resumeTimerId);
-        if (isHovering) {
-          return;
-        }
-        if (immediate) {
-          intervalId = setInterval(rotateNext, AUTO_ROTATE_MS);
-          return;
-        }
-        resumeTimerId = setTimeout(() => {
-          if (isHovering) {
-            return;
-          }
-          intervalId = setInterval(rotateNext, AUTO_ROTATE_MS);
-        }, RESUME_AFTER_MANUAL_MS);
+      function queueCycle(delay = 520) {
+        clearTimeout(cycleTimerId);
+        cycleTimerId = setTimeout(runTeamCycle, delay);
       }
 
-      carousel.addEventListener("mouseenter", () => {
-        isHovering = true;
-        clearInterval(intervalId);
-        clearTimeout(resumeTimerId);
-      });
+      function wait(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+      }
 
-      carousel.addEventListener("mouseleave", () => {
-        isHovering = false;
-        startAutoRotate();
-      });
+      function memberTargets(memberCount, teamKey = "") {
+        const others = Math.max(0, memberCount - 1);
+        const mobile = window.innerWidth <= 768;
+        const stepX = mobile ? 108 : 210;
+        const stepY = mobile ? 24 : 34;
+        const leadY = mobile ? -10 : -18;
+        const baseY = mobile ? 24 : 34;
+        const targets = [{ x: 0, y: leadY }];
+        if (!others) {
+          return targets;
+        }
+
+        if (memberCount === 4 && teamKey === "social") {
+          const leadX = -(stepX * (mobile ? 0.1 : 0.14));
+          const topX = stepX * (mobile ? 0.88 : 1.04);
+          const topY = leadY + (mobile ? 2 : 4);
+          const bottomLeftX = stepX * (mobile ? 1.1 : 1.42);
+          const bottomRightX = stepX * (mobile ? 1.52 : 1.9);
+          const bottomY = baseY + stepY * (mobile ? 2.35 : 4.1);
+          return [
+            { x: leadX, y: leadY },
+            { x: topX, y: topY },
+            { x: -bottomLeftX, y: bottomY },
+            { x: bottomRightX, y: bottomY + (mobile ? 6 : 10) }
+          ];
+        }
+
+        if (memberCount === 6) {
+          const topX = stepX * (mobile ? 1.02 : 1.32);
+          const topY = leadY - (mobile ? 16 : 22);
+          const bottomX = stepX * (mobile ? 1.75 : 2.45);
+          const bottomY = baseY + stepY * (mobile ? 1.85 : 2.25);
+          const midY = bottomY + (mobile ? 68 : 88);
+          return [
+            { x: 0, y: leadY },
+            { x: topX, y: topY },
+            { x: -topX, y: topY },
+            { x: -bottomX, y: bottomY },
+            { x: 0, y: midY },
+            { x: bottomX, y: bottomY }
+          ];
+        }
+
+        for (let i = 1; i <= others; i += 1) {
+          const tier = Math.ceil(i / 2);
+          const isLeft = i % 2 === 1;
+          const direction = isLeft ? -1 : 1;
+          targets.push({
+            x: direction * tier * stepX,
+            y: baseY + tier * stepY + (isLeft ? 0 : 5)
+          });
+        }
+
+        return targets;
+      }
+
+      function createMemberCard(member, isLead) {
+        const card = document.createElement("article");
+        card.className = `team-card member-card${isLead ? " lead" : ""}`;
+        card.innerHTML = `
+          <div class="team-card-face">
+            ${isLead ? '<div class="president-ribbon">TEAM LEAD</div>' : ""}
+            <div class="avatar">${getInitials(member.name)}</div>
+            <h4>${member.name}</h4>
+            <p>&gt; ${member.role}</p>
+          </div>
+        `;
+        return card;
+      }
+
+      async function revealMembersForActiveTeam() {
+        const team = teams[activeIndex];
+        const activeCard = cards[activeIndex];
+        if (!team || !activeCard) {
+          return;
+        }
+
+        const leadMember = team.members.find((member) => member.lead) || team.members[0];
+        const otherMembers = team.members.filter((member) => member !== leadMember);
+        const orderedMembers = [leadMember, ...otherMembers];
+
+        const stageRect = membersStage.getBoundingClientRect();
+        const cardRect = activeCard.getBoundingClientRect();
+        const centerX = (cardRect.left - stageRect.left) + (cardRect.width * 0.5);
+        const centerY = (cardRect.top - stageRect.top) + (cardRect.height * 0.5);
+        const targets = memberTargets(orderedMembers.length, team.key);
+
+        membersStage.innerHTML = "";
+        const memberCards = orderedMembers.map((member, idx) => {
+          const memberCard = createMemberCard(member, idx === 0);
+          memberCard.style.left = `${centerX}px`;
+          memberCard.style.top = `${centerY}px`;
+          memberCard.style.zIndex = String(idx === 0 ? 140 : 120);
+          membersStage.appendChild(memberCard);
+          return memberCard;
+        });
+
+        activeCard.classList.add("is-flipped");
+        await wait(140);
+
+        cards.forEach((card) => card.classList.add("is-suppressed"));
+        carousel.classList.add("members-open");
+
+        await new Promise((resolve) => {
+          gsap.fromTo(memberCards, {
+            x: 0,
+            y: 0,
+            scale: 0.28,
+            opacity: 0,
+            rotateY: -90
+          }, {
+            x: (idx) => targets[idx].x,
+            y: (idx) => targets[idx].y,
+            scale: (idx) => (idx === 0 ? 1.04 : 0.92),
+            opacity: 1,
+            rotateY: 0,
+            duration: 0.72,
+            stagger: 0.06,
+            ease: "power3.out",
+            onComplete: resolve
+          });
+        });
+
+        await wait(1700);
+
+        await new Promise((resolve) => {
+          gsap.to(memberCards, {
+            x: 0,
+            y: 0,
+            scale: 0.24,
+            opacity: 0,
+            rotateY: 95,
+            duration: 0.56,
+            stagger: { each: 0.035, from: "end" },
+            ease: "power2.in",
+            onComplete: resolve
+          });
+        });
+
+        membersStage.innerHTML = "";
+        carousel.classList.remove("members-open");
+        cards.forEach((card) => card.classList.remove("is-suppressed"));
+        activeCard.classList.remove("is-flipped");
+        applyLayout();
+        await wait(360);
+      }
+
+      async function runTeamCycle() {
+        if (isBusy || isDragging) {
+          queueCycle(280);
+          return;
+        }
+
+        isBusy = true;
+        await revealMembersForActiveTeam();
+        rotateNext();
+        isBusy = false;
+        queueCycle(740);
+      }
 
       carousel.addEventListener("mousedown", (e) => {
+        if (isBusy) {
+          return;
+        }
         isDragging = true;
         dragStartX = e.clientX;
         carousel.classList.add("is-dragging");
@@ -631,33 +965,29 @@ gsap.registerPlugin(ScrollTrigger);
         }
         isDragging = false;
         carousel.classList.remove("is-dragging");
-        startAutoRotate(false);
+        queueCycle(680);
       });
 
       carousel.addEventListener("wheel", (e) => {
         const horizontalIntent = Math.abs(e.deltaX) > Math.abs(e.deltaY);
-        if (!horizontalIntent) {
+        if (!horizontalIntent || isBusy) {
           return;
         }
         e.preventDefault();
         if (!canManualRotate()) {
           return;
         }
-        const axisDelta = e.deltaX;
-        if (Math.abs(axisDelta) < 5) {
-          return;
-        }
-        if (axisDelta > 0) {
+        if (e.deltaX > 0) {
           rotateNext();
         } else {
           rotatePrev();
         }
-        startAutoRotate(false);
+        queueCycle(680);
       }, { passive: false });
 
       carousel.addEventListener("touchstart", (e) => {
         const t = e.touches[0];
-        if (!t) {
+        if (!t || isBusy) {
           return;
         }
         touchStartX = t.clientX;
@@ -666,15 +996,12 @@ gsap.registerPlugin(ScrollTrigger);
 
       carousel.addEventListener("touchend", (e) => {
         const t = e.changedTouches[0];
-        if (!t) {
+        if (!t || isBusy) {
           return;
         }
         const dx = t.clientX - touchStartX;
         const dy = t.clientY - touchStartY;
-        if (Math.abs(dx) < 26 || Math.abs(dx) < Math.abs(dy)) {
-          return;
-        }
-        if (!canManualRotate()) {
+        if (Math.abs(dx) < 26 || Math.abs(dx) < Math.abs(dy) || !canManualRotate()) {
           return;
         }
         if (dx < 0) {
@@ -682,13 +1009,13 @@ gsap.registerPlugin(ScrollTrigger);
         } else {
           rotatePrev();
         }
-        startAutoRotate(false);
+        queueCycle(680);
       }, { passive: true });
 
       window.addEventListener("resize", applyLayout);
 
       applyLayout();
-      startAutoRotate();
+      queueCycle(1200);
     }
 
     initTeamCarousel();
