@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import confetti from "canvas-confetti";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -1542,3 +1543,173 @@ gsap.registerPlugin(ScrollTrigger);
 
     initParticles();
   // Antelope background effect removed as requested.
+
+  // --- INAUGURATION SECRET PROTOCOL ---
+  function initInauguration() {
+    const launchDate = new Date("2026-04-11T17:00:00+05:30").getTime();
+    let overrideTime = null;
+    let hasRevealed = false;
+    let inClimax = false;
+    let lastSecond = -1;
+
+    const timerNumbers  = document.getElementById("timer-numbers");
+    const panelLeft     = document.getElementById("panel-left");
+    const panelRight    = document.getElementById("panel-right");
+    const revealContent = document.getElementById("reveal-content");
+    const timerDisplay  = document.getElementById("inauguration-timer");
+    const climaxOverlay = document.getElementById("climax-overlay");
+    const climaxNumber  = document.getElementById("climax-number");
+    const inauSection   = document.getElementById("inauguration");
+
+    if (!timerNumbers || !panelLeft || !panelRight || !revealContent) return;
+
+    function formatTime(t) {
+      if (t < 0) return "00:00:00:00";
+      const d = Math.floor(t / 86400000);
+      const h = Math.floor((t / 3600000) % 24);
+      const m = Math.floor((t / 60000) % 60);
+      const s = Math.floor((t / 1000) % 60);
+      return `${String(d).padStart(2,"0")}:${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+    }
+
+    function beatNumber(n) {
+      if (!climaxNumber) return;
+      climaxNumber.textContent = String(n);
+      climaxNumber.classList.remove("beat");
+      void climaxNumber.offsetWidth;
+      climaxNumber.classList.add("beat");
+    }
+
+    function startClimax() {
+      if (inClimax) return;
+      inClimax = true;
+      gsap.to(timerDisplay, { opacity: 0, duration: 0.45, ease: "power2.inOut" });
+      if (inauSection) gsap.to(inauSection, { backgroundColor: "rgba(2,6,14,0.95)", duration: 1.2, ease: "power2.inOut" });
+      if (climaxOverlay) climaxOverlay.classList.add("active");
+    }
+
+    function triggerReveal() {
+      if (hasRevealed) return;
+      hasRevealed = true;
+
+      beatNumber(0);
+
+      setTimeout(() => {
+        if (climaxOverlay) climaxOverlay.classList.remove("active");
+
+        const tl = gsap.timeline();
+
+        if (inauSection) tl.to(inauSection, { backgroundColor: "transparent", duration: 1.5, ease: "power2.inOut" }, 0);
+
+        tl.to(panelLeft,  { x: "-100%", duration: 2.4, ease: "power3.inOut" }, 0.3);
+        tl.to(panelRight, { x:  "100%", duration: 2.4, ease: "power3.inOut" }, 0.3);
+
+        tl.to(revealContent, { opacity: 1, scale: 1, duration: 1.8, ease: "expo.out" }, 1.2);
+
+        tl.fromTo(".reveal-subtitle",
+          { opacity: 0, letterSpacing: "12px" },
+          { opacity: 1, letterSpacing: "5px", duration: 1, ease: "power2.out" },
+          2.2
+        );
+        tl.fromTo(".reveal-tagline",
+          { opacity: 0, y: 8 },
+          { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" },
+          2.8
+        );
+
+        tl.add(fireConfetti, 0.8);
+
+      }, 1200);
+    }
+
+    function fireConfetti() {
+      const GOLD_COLORS  = ["#FFD700", "#C9972A", "#FFFFFF", "#FFF8DC"];
+      const PARTY_COLORS = ["#FF3B3B", "#FF9F00", "#FFD700", "#00C851", "#007BFF", "#C200FB", "#FF6B9D"];
+
+      // ── PHASE 1: Colorful party confetti burst for 9 seconds ──
+      const phase1End = Date.now() + 9000;
+      (function phase1() {
+        if (Date.now() >= phase1End) {
+
+          // ── PHASE 2: Massive gold volley from both sides (the big WOW moment) ──
+          confetti({ particleCount: 100, angle: 60,  spread: 75, origin: { x: 0,   y: 0.85 }, colors: GOLD_COLORS, scalar: 1.3 });
+          confetti({ particleCount: 100, angle: 120, spread: 75, origin: { x: 1,   y: 0.85 }, colors: GOLD_COLORS, scalar: 1.3 });
+          confetti({ particleCount: 60,  angle: 90,  spread: 60, origin: { x: 0.5, y: 1    }, colors: GOLD_COLORS, scalar: 1.5 });
+
+          // Sustained gold shower after the big volley for 7 more seconds
+          const phase2End = Date.now() + 7000;
+          (function phase2Sustain() {
+            if (Date.now() >= phase2End) return;
+            confetti({ particleCount: 6, angle: 60,  spread: 60, origin: { x: 0,   y: 0.85 }, colors: GOLD_COLORS });
+            confetti({ particleCount: 6, angle: 120, spread: 60, origin: { x: 1,   y: 0.85 }, colors: GOLD_COLORS });
+            confetti({ particleCount: 4, angle: 90,  spread: 50, origin: { x: 0.5, y: 1    }, colors: GOLD_COLORS });
+            requestAnimationFrame(phase2Sustain);
+          }());
+
+          return;
+        }
+
+        // Phase 1: Colorful party confetti pieces from both sides
+        confetti({
+          particleCount: 5,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0, y: 0.8 },
+          colors: PARTY_COLORS,
+          shapes: ["circle", "square"],
+          scalar: 0.9
+        });
+        confetti({
+          particleCount: 5,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1, y: 0.8 },
+          colors: PARTY_COLORS,
+          shapes: ["circle", "square"],
+          scalar: 0.9
+        });
+        requestAnimationFrame(phase1);
+      }());
+    }
+
+
+
+    const interval = setInterval(() => {
+      if (hasRevealed) { clearInterval(interval); return; }
+      const diff    = (overrideTime !== null ? overrideTime : launchDate) - Date.now();
+      const secLeft = Math.ceil(diff / 1000);
+
+      if (diff <= 10000 && diff > 0) {
+        if (!inClimax) startClimax();
+        if (secLeft !== lastSecond) { lastSecond = secLeft; beatNumber(secLeft); }
+      } else {
+        timerNumbers.textContent = formatTime(diff);
+      }
+
+      if (diff <= 0) triggerReveal();
+    }, 200);
+
+    timerNumbers.textContent = formatTime((overrideTime !== null ? overrideTime : launchDate) - Date.now());
+
+    window.addEventListener("keydown", (e) => {
+      if (e.shiftKey && (e.key === "I" || e.key === "i")) {
+        hasRevealed = false;
+        inClimax    = false;
+        lastSecond  = -1;
+        if (climaxOverlay) climaxOverlay.classList.remove("active");
+        gsap.set(panelLeft,     { x: "0%" });
+        gsap.set(panelRight,    { x: "0%" });
+        gsap.set(revealContent, { opacity: 0, scale: 0.88 });
+        gsap.set(timerDisplay,  { opacity: 1 });
+
+        const targetSection = document.getElementById("inauguration");
+        if (targetSection) {
+          const navH = document.getElementById("navbar")?.offsetHeight || 0;
+          window.scrollTo({ top: targetSection.getBoundingClientRect().top + window.scrollY - navH - 18, behavior: "smooth" });
+        }
+        overrideTime = Date.now() + 13500;
+      }
+    });
+  }
+
+  initInauguration();

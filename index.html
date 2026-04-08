@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="CIPHER is the official IT Students' Executive Council of MIT Academy of Engineering, Pune." />
+  <meta name="description"
+    content="CIPHER is the official IT Students' Executive Council of MIT Academy of Engineering, Pune." />
   <meta name="theme-color" content="#08111E" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -11,9 +13,12 @@
   <title>CIPHER — IT Students' Executive Council</title>
   <link rel="icon" type="image/png" href="/assets/Cipher-logo.png" />
   <link rel="apple-touch-icon" href="/assets/Cipher-logo.png" />
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&family=Share+Tech+Mono&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="src/styles.css" />
 </head>
+
 <body>
   <div class="grid-bg"></div>
   <canvas id="particle-canvas"></canvas>
@@ -30,7 +35,9 @@
     </div>
     <div class="loader-title" id="loader-title">CIPHER</div>
     <div class="loader-story" id="loader-story"></div>
-    <div class="progress"><div class="progress-bar"></div></div>
+    <div class="progress">
+      <div class="progress-bar"></div>
+    </div>
   </div>
 
   <nav id="navbar">
@@ -39,15 +46,18 @@
       <div class="logo-text">
         <strong>CIPHER</strong>
         <span>IT STUDENTS' EXECUTIVE COUNCIL</span>
+        <span class="dept-text">DEPARTMENT OF INFORMATION TECHNOLOGY</span>
       </div>
     </div>
     <div class="nav-links">
+      <a href="#inauguration">Inauguration</a>
       <a href="#about">About</a>
+      <a href="#vision-mission">Vision & Mission</a>
       <a href="#events">Events</a>
       <a href="#team">Team</a>
-      <a href="#gallery">Gallery</a>
-      <a href="#achievements">Achievements</a>
-      <a href="#join">FAQ</a>
+      <!-- <a href="#gallery">Gallery</a> -->
+      <!-- <a href="#achievements">Achievements</a> -->
+      <a href="#join">Deep Dive</a>
     </div>
     <div class="hamburger" id="hamburger">
       <span></span><span></span><span></span>
@@ -55,12 +65,14 @@
   </nav>
 
   <div class="mobile-menu" id="mobile-menu">
+    <a href="#inauguration">Inauguration</a>
     <a href="#about">About</a>
+    <a href="#vision-mission">Vision & Mission</a>
     <a href="#events">Events</a>
     <a href="#team">Team</a>
-    <a href="#gallery">Gallery</a>
-    <a href="#achievements">Achievements</a>
-    <a href="#join">FAQ</a>
+    <!-- <a href="#gallery">Gallery</a> -->
+    <!-- <a href="#achievements">Achievements</a> -->
+    <a href="#join">Deep Dive</a>
   </div>
 
   <section id="hero">
@@ -74,32 +86,159 @@
     <div class="scroll-indicator">SCROLL TO DECODE ↓</div>
   </section>
 
+  <section id="inauguration" class="container">
+    <div class="section-tag">// 00 — PROTOCOL INITIATION</div>
+    <div class="section-heading">INAUGURATION</div>
+    <div class="section-line"></div>
+    <div class="inauguration-stage">
+      <div class="glass-container" id="inauguration-stage">
+
+        <!-- The Final Reveal Content (hidden behind panels initially) -->
+        <div class="reveal-content" id="reveal-content">
+          <div class="reveal-aurora"></div>
+          <div class="reveal-ring reveal-ring-outer"></div>
+          <div class="reveal-ring"></div>
+          <div class="reveal-logo">
+            <img src="/assets/antelope.svg" alt="CIPHER emblem" class="reveal-emblem" />
+            <h2 class="reveal-title">CIPHER</h2>
+            <p class="reveal-subtitle">IT STUDENTS' EXECUTIVE COUNCIL</p>
+            <p class="reveal-tagline">MIT ACADEMY OF ENGINEERING, PUNE</p>
+          </div>
+        </div>
+
+        <!-- The Sliding Glass Panels ('Parda') — no border-right/left classes -->
+        <div class="glass-panel panel-left" id="panel-left">
+          <div class="panel-inner"></div>
+        </div>
+        <div class="glass-panel panel-right" id="panel-right">
+          <div class="panel-inner"></div>
+        </div>
+
+        <!-- The Live Timer Display (Top Layer) -->
+        <div class="timer-display" id="inauguration-timer">
+          <div class="timer-orb">
+            <div class="timer-title">CIPHER INAUGURATION PROTOCOL</div>
+            <div class="timer-numbers" id="timer-numbers">00:00:00:00</div>
+            <div class="timer-labels">
+              <span>DAYS</span><span>HRS</span><span>MIN</span><span>SEC</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Climax Overlay: Big number countdown for last 10s -->
+        <div class="climax-overlay" id="climax-overlay">
+          <div class="climax-number" id="climax-number"></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
   <section id="about" class="container">
     <div class="section-tag">// 01 — ABOUT CIPHER</div>
     <div class="section-heading">WHO WE ARE</div>
     <div class="section-line"></div>
     <div class="content">
       <div class="about-text">
-        <p>CIPHER is the official IT Students' Executive Council of MIT Academy of Engineering, Pune. We are a community of curious minds, relentless builders, and forward-thinking innovators united by one purpose — to decode the future of technology.</p>
-        <p style="margin-top:1.2rem;">From organizing cutting-edge tech talks and hackathons to fostering industry connections, CIPHER exists to bridge the gap between classroom learning and real-world innovation.</p>
-        <div class="quote">We don't just study technology. We shape it.</div>
+        <p>CIPHER is the premier IT Students' Executive Council of MIT Academy of Engineering, Alandi, Pune. As an elite
+          technical collective, we unite visionary developers, security researchers, and creative problem solvers under
+          a shared mission: to architect the next generation of digital infrastructure.</p>
+        <p style="margin-top:1.2rem;">Beyond traditional academics, CIPHER serves as a high-octane launchpad for
+          innovation—orchestrating industry-standard hackathons, technical symposiums, and deep-tech workshops that
+          transform students into industry-ready engineers.</p>
+        <div class="quote">We don't just study technology. We architect the future.</div>
       </div>
+
       <div class="stats-grid">
-        <div class="stat-card" data-count="50" data-suffix="+">
+        <!-- 1. 6+ Domains -->
+        <div class="stat-card" data-count="6" data-suffix="+">
+          <div class="stat-number">0</div>
+          <div class="stat-label">DEDICATED DOMAINS</div>
+        </div>
+
+        <!-- 2. 8+ Mentors -->
+        <div class="stat-card" data-count="8" data-suffix="+">
+          <div class="stat-number">0</div>
+          <div class="stat-label">EXPERT MENTORS</div>
+        </div>
+
+        <!-- 3. 40+ Members -->
+        <div class="stat-card" data-count="40" data-suffix="+">
           <div class="stat-number">0</div>
           <div class="stat-label">MEMBERS STRONG</div>
         </div>
-        <div class="stat-card" data-count="8">
+
+        <!-- 4. 450+ Registrations -->
+        <div class="stat-card" data-count="450" data-suffix="+">
           <div class="stat-number">0</div>
-          <div class="stat-label">EVENTS CONDUCTED</div>
+          <div class="stat-label">REGISTRATIONS FOR 1ST EVENT</div>
         </div>
-        <div class="stat-card" data-count="3">
-          <div class="stat-number">0</div>
-          <div class="stat-label">YEARS OF EXCELLENCE</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="vision-mission" class="container">
+    <div class="section-tag">// 01B — CORE DIRECTIVES</div>
+    <div class="section-heading">VISION & MISSION</div>
+    <div class="section-line"></div>
+    <div class="vision-mission-grid">
+      <div class="vm-card vision-card">
+        <div class="vm-border-trace"></div>
+        <div class="vm-bg-glow"></div>
+        <div class="vm-content">
+          <div class="vm-icon">
+            <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="url(#vision-grad)" stroke-width="1.5">
+              <defs>
+                <linearGradient id="vision-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#FFD700" />
+                  <stop offset="100%" stop-color="#C9972A" />
+                </linearGradient>
+              </defs>
+              <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+            <div class="vm-icon-glow"></div>
+          </div>
+          <h3 class="vm-title">VISION<span class="vm-title-accent">_01</span></h3>
+          <div class="vm-divider"></div>
+          <p class="vm-text">
+            To establish CIPHER as a dynamic and innovative student-driven platform that nurtures technical excellence, leadership, and creativity, empowering students to become future-ready professionals capable of solving real-world challenges.
+          </p>
         </div>
-        <div class="stat-card" data-count="99" data-suffix="∞">
-          <div class="stat-number">0</div>
-          <div class="stat-label">LINES OF CODE</div>
+      </div>
+
+      <div class="vm-card mission-card">
+        <div class="vm-border-trace"></div>
+        <div class="vm-bg-glow"></div>
+        <div class="vm-content">
+          <div class="vm-icon">
+            <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="url(#mission-grad)" stroke-width="1.5">
+              <defs>
+                <linearGradient id="mission-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#58DEFF" />
+                  <stop offset="100%" stop-color="#1B5FAA" />
+                </linearGradient>
+              </defs>
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+            </svg>
+            <div class="vm-icon-glow"></div>
+          </div>
+          <h3 class="vm-title">MISSION<span class="vm-title-accent">_02</span></h3>
+          <div class="vm-divider"></div>
+          <ul class="vm-list">
+            <li>
+              <div class="li-content">To promote a culture of innovation through technical, co-curricular, and extracurricular activities.</div>
+            </li>
+            <li>
+              <div class="li-content">To develop essential skills such as leadership, teamwork, entrepreneurship, and professional ethics among students.</div>
+            </li>
+            <li>
+              <div class="li-content">To provide opportunities for students to explore emerging technologies and enhance their technical competencies.</div>
+            </li>
+            <li>
+              <div class="li-content">To foster collaboration, creativity, and continuous learning within the student community.</div>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
@@ -111,18 +250,21 @@
     <div class="featured velora-featured">
       <div class="velora-web velora-web-left" aria-hidden="true"></div>
       <div class="velora-web velora-web-right" aria-hidden="true"></div>
-      <div class="upcoming-tag"><span class="blink-dot"></span>REGISTRATIONS OPEN NOW</div>
+      <div class="upcoming-tag"><span class="blink-dot" style="background: #ff4444;"></span>REGISTRATIONS COMPLETED (250+)</div>
       <h3 class="velora-headline">VELORA 1.0 — DARE TO COMPETE</h3>
       <div class="date">FINAL ROUND: 11 APRIL 2026</div>
-      <div class="desc">The wait is over. Velora 1.0 is officially live - a 24-hour national-level hackathon powered by CIPHER x IEEE. Bring your team, build bold ideas, and compete across multiverse domains.</div>
+      <div class="desc">The wait is over. Velora 1.0 is officially live - a 24-hour national-level hackathon powered by
+        CIPHER x IEEE. Bring your team, build bold ideas, and compete across multiverse domains.</div>
       <div class="event-highlights">
         <span class="velora-chip">24-Hour Hackathon</span>
         <span class="velora-chip">Team Size: 2-5</span>
-        <span class="velora-chip">Registration Fee: ₹360/-</span>
       </div>
       <div class="event-links">
-        <a class="event-link" href="https://unstop.com/p/velora-10-dare-to-compete-24-hour-national-level-hackathon-mit-academy-of-engineering-mitaoe-pune-maharashtra-1659315" target="_blank" rel="noopener noreferrer">REGISTER ON UNSTOP</a>
-        <a class="event-link secondary" href="https://velora-cipher.vercel.app" target="_blank" rel="noopener noreferrer">VISIT VELORA WEBSITE</a>
+        <a class="event-link"
+          href="https://unstop.com/p/velora-10-dare-to-compete-24-hour-national-level-hackathon-mit-academy-of-engineering-mitaoe-pune-maharashtra-1659315"
+          target="_blank" rel="noopener noreferrer">REGISTER ON UNSTOP</a>
+        <a class="event-link secondary" href="https://velora-cipher.vercel.app" target="_blank"
+          rel="noopener noreferrer">VISIT VELORA WEBSITE</a>
       </div>
       <div class="velora-spidey" aria-hidden="true">
         <div class="spidey-head">
@@ -149,20 +291,23 @@
       <div class="event-card velora-card">
         <span class="done">ROUND 1</span>
         <div class="card-title">SUBMISSION STAGE</div>
-        <div class="card-badge">DEADLINE: 30 MARCH 2026, 11:59 PM</div>
-        <div class="card-desc">Submit PPT + 5 to 6 minute idea presentation. Evaluation can be online/offline based on preference.</div>
+        <div class="card-badge">DEADLINE: 5 APRIL 2026, 11:59 PM</div>
+        <div class="card-desc">Submit PPT + 5 to 6 minute idea presentation. Evaluation can be online/offline based on
+          preference.</div>
       </div>
       <div class="event-card velora-card">
         <span class="done">ROUND 2</span>
         <div class="card-title">THE FINAL ROUND</div>
         <div class="card-badge">11 APRIL 2026</div>
-        <div class="card-desc">Shortlisted teams move into the final 24-hour hackathon sprint. Final operation details are released to selected teams.</div>
+        <div class="card-desc">Shortlisted teams move into the final 24-hour hackathon sprint. Final operation details
+          are released to selected teams.</div>
       </div>
       <div class="event-card velora-card">
         <span class="done">LIVE UPDATE</span>
-        <div class="card-title">REGISTRATIONS ARE OPEN</div>
+        <div class="card-title">REGISTRATIONS COMPLETED</div>
         <div class="card-badge">VELORA 1.0</div>
-        <div class="card-desc">Cybersecurity, EdTech, FinTech, Agentic AI/AI-ML, Web3/Blockchain, MedTech and Open Innovation tracks are now active.</div>
+        <div class="card-desc">Cybersecurity, EdTech, FinTech, Agentic AI/AI-ML, Web3/Blockchain, MedTech and Open
+          Innovation tracks are now active.</div>
       </div>
     </div>
   </section>
@@ -240,6 +385,7 @@
     </div>
   </section>
 
+  <!--
   <section id="gallery" class="container">
     <div class="section-tag">// 05 — MEMORY BANK</div>
     <div class="section-heading">FIELD ARCHIVE</div>
@@ -264,12 +410,15 @@
       </div>
     </div>
   </section>
+  -->
 
+  <!--
   <section id="achievements" class="container">
     <div class="section-tag">// 02 — ACHIEVEMENTS</div>
     <div class="section-heading">MISSION TRACKER</div>
     <div class="achievements-intro">
-      <p>From flagship events to community operations, these are the high-impact tracks currently shaping CIPHER's journey.</p>
+      <p>From flagship events to community operations, these are the high-impact tracks currently shaping CIPHER's
+        journey.</p>
       <div class="achievements-tags">
         <span>FLAGSHIP WORK</span>
         <span>ACTIVE PIPELINE</span>
@@ -282,7 +431,8 @@
         <span class="card-icon">⟡</span>
         <span class="card-badge">FLAGSHIP</span>
         <div class="card-title">VELORA 1.0 EXECUTION</div>
-        <div class="card-desc">National-level hackathon rollout across registrations, shortlist pipeline, and final round orchestration.</div>
+        <div class="card-desc">National-level hackathon rollout across registrations, shortlist pipeline, and final
+          round orchestration.</div>
         <ul class="achievement-points">
           <li>Operations + mentor coordination</li>
           <li>Brand visibility + participant flow</li>
@@ -294,7 +444,8 @@
         <span class="card-icon">◈</span>
         <span class="card-badge">INITIATIVE</span>
         <div class="card-title">TECH TALK SERIES</div>
-        <div class="card-desc">Curated technical sessions focused on practical learning, mentorship, and career direction.</div>
+        <div class="card-desc">Curated technical sessions focused on practical learning, mentorship, and career
+          direction.</div>
       </div>
       <div class="card achievement-card">
         <div class="shine"></div>
@@ -308,36 +459,44 @@
         <span class="card-icon">⬢</span>
         <span class="card-badge">INITIATIVE</span>
         <div class="card-title">INDUSTRY CONNECT</div>
-        <div class="card-desc">Building real-world collaboration channels for internships, projects, and practitioner guidance.</div>
+        <div class="card-desc">Building real-world collaboration channels for internships, projects, and practitioner
+          guidance.</div>
       </div>
     </div>
   </section>
+  -->
 
   <section id="join" class="container">
     <div class="section-tag">// 06 — OPERATIONS DESK</div>
-    <div class="section-heading">CIPHER FAQS</div>
-    <div class="join-subtitle">Quick clarity for new operatives. For direct communication use Contact CIPHER, and for updates connect on Instagram and LinkedIn.</div>
+    <div class="section-heading">CIPHER-DEEP DIVE</div>
+    <div class="join-subtitle">Quick clarity for new operatives. For direct communication use Contact CIPHER, and for
+      updates connect on Instagram and LinkedIn.</div>
     <div class="join-grid">
       <div class="faq-panel">
         <details class="faq-item" open>
           <summary>What is CIPHER?</summary>
-          <p>CIPHER is the IT Students' Executive Council of MITAOE, focused on building technical culture through events, hackathons, workshops, and community initiatives.</p>
+          <p>CIPHER is the IT Students' Executive Council of MITAOE, focused on building technical culture through
+            events, hackathons, workshops, and community initiatives.</p>
         </details>
         <details class="faq-item">
           <summary>Who can connect with CIPHER?</summary>
-          <p>Students, mentors, collaborators, and tech communities can connect for event updates, collaborations, and participation opportunities.</p>
+          <p>Students, mentors, collaborators, and tech communities can connect for event updates, collaborations, and
+            participation opportunities.</p>
         </details>
         <details class="faq-item">
           <summary>How can I join CIPHER activities?</summary>
-          <p>You can join through open calls announced on our social channels and by participating in drives, workshops, and project collaborations.</p>
+          <p>You can join through open calls announced on our social channels and by participating in drives, workshops,
+            and project collaborations.</p>
         </details>
         <details class="faq-item">
           <summary>Where do I get the latest updates?</summary>
-          <p>Instagram is the fastest source for announcements, while LinkedIn carries professional highlights, collaborations, and key milestones.</p>
+          <p>Instagram is the fastest source for announcements, while LinkedIn carries professional highlights,
+            collaborations, and key milestones.</p>
         </details>
         <details class="faq-item">
           <summary>Can we collaborate with CIPHER for events or outreach?</summary>
-          <p>Yes. We actively collaborate with student communities, mentors, and industry partners for events, sessions, and technical initiatives.</p>
+          <p>Yes. We actively collaborate with student communities, mentors, and industry partners for events, sessions,
+            and technical initiatives.</p>
         </details>
       </div>
       <div class="faq-contact-wrap">
@@ -357,7 +516,9 @@
       <div class="socials">
         <h4>CONNECT</h4>
         <div class="social-links">
-          <a class="social-link-card social-instagram" href="https://www.instagram.com/ciphermitaoe?igsh=emZqMHJ3a2oycjRy" target="_blank" rel="noopener noreferrer" aria-label="Open Instagram">
+          <a class="social-link-card social-instagram"
+            href="https://www.instagram.com/ciphermitaoe?igsh=emZqMHJ3a2oycjRy" target="_blank"
+            rel="noopener noreferrer" aria-label="Open Instagram">
             <span class="social-orb" aria-hidden="true">
               <svg viewBox="0 0 24 24">
                 <rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect>
@@ -367,7 +528,8 @@
             </span>
             <span class="social-label">Instagram</span>
           </a>
-          <a class="social-link-card social-linkedin" href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="Open LinkedIn">
+          <a class="social-link-card social-linkedin" href="https://www.linkedin.com" target="_blank"
+            rel="noopener noreferrer" aria-label="Open LinkedIn">
             <span class="social-orb" aria-hidden="true">
               <svg viewBox="0 0 24 24">
                 <rect x="3.2" y="3.2" width="17.6" height="17.6" rx="2.6"></rect>
@@ -393,5 +555,5 @@
 
   <script type="module" src="src/main.js"></script>
 </body>
-</html>
 
+</html>
