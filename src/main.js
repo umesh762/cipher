@@ -127,7 +127,7 @@ gsap.registerPlugin(ScrollTrigger);
 
     // Typing effect
     const typedText = document.getElementById("typed-text");
-    const message = "> Decoding the future of Information Technology...";
+    const message = "> In source, we trust.";
     let i = 0;
     function typeChar() {
       if (i < message.length) {
@@ -1544,6 +1544,87 @@ gsap.registerPlugin(ScrollTrigger);
     initParticles();
   // Antelope background effect removed as requested.
 
+  // --- INAUGURATION AUDIO EFFECT (Web Audio API) ---
+  let audioCtx = null;
+  function playBalloonBurst(loudness = 1.0) {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    
+    const now = audioCtx.currentTime;
+    
+    // Create white noise for the sharp "pop/burst" texture
+    const bufferSize = audioCtx.sampleRate * 0.15; // 0.15 seconds
+    const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    const output = noiseBuffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+        output[i] = Math.random() * 2 - 1;
+    }
+    
+    const noise = audioCtx.createBufferSource();
+    noise.buffer = noiseBuffer;
+    
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = 'highpass';
+    filter.frequency.value = 1000;
+    
+    const noiseGain = audioCtx.createGain();
+    noiseGain.gain.setValueAtTime(0, now);
+    noiseGain.gain.linearRampToValueAtTime(loudness * 2.0, now + 0.01);
+    noiseGain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+    
+    noise.connect(filter);
+    filter.connect(noiseGain);
+    noiseGain.connect(audioCtx.destination);
+    
+    noise.start(now);
+    noise.stop(now + 0.15);
+    
+    // Add the deep "thud/punch" body of the balloon bursting
+    const osc = audioCtx.createOscillator();
+    const oscGain = audioCtx.createGain();
+    osc.type = 'sine';
+    
+    // Pitch drops from mid to sub very fast
+    osc.frequency.setValueAtTime(250 + Math.random() * 100, now);
+    osc.frequency.exponentialRampToValueAtTime(40, now + 0.1);
+    
+    oscGain.gain.setValueAtTime(0, now);
+    oscGain.gain.linearRampToValueAtTime(loudness * 2.5, now + 0.01);
+    oscGain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+    
+    osc.connect(oscGain);
+    oscGain.connect(audioCtx.destination);
+    
+    osc.start(now);
+    osc.stop(now + 0.15);
+  }
+
+  function playTickSound() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+
+    const osc = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(1000, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+    
+    gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+    gainNode.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime + 0.01);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+    
+    osc.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.1);
+  }
+
   // --- INAUGURATION SECRET PROTOCOL ---
   function initInauguration() {
     const launchDate = new Date("2026-04-11T17:00:00+05:30").getTime();
@@ -1574,6 +1655,12 @@ gsap.registerPlugin(ScrollTrigger);
 
     function beatNumber(n) {
       if (!climaxNumber) return;
+      
+      // Play a tick for every number in the countdown climax (1 to 10)
+      if (n > 0 && n <= 10) {
+        playTickSound();
+      }
+
       climaxNumber.textContent = String(n);
       climaxNumber.classList.remove("beat");
       void climaxNumber.offsetWidth;
@@ -1593,6 +1680,7 @@ gsap.registerPlugin(ScrollTrigger);
       hasRevealed = true;
 
       beatNumber(0);
+      playBalloonBurst(1.5); // A loud burst directly on 0
 
       setTimeout(() => {
         if (climaxOverlay) climaxOverlay.classList.remove("active");
@@ -1628,10 +1716,22 @@ gsap.registerPlugin(ScrollTrigger);
 
       // ── PHASE 1: Colorful party confetti burst for 9 seconds ──
       const phase1End = Date.now() + 9000;
+      
+      // We use setInterval for the popping sound during phase 1, so it pops periodically 
+      // without overwhelming the user or browser
+      const burstingInterval = setInterval(() => {
+        if (Date.now() >= phase1End) {
+          clearInterval(burstingInterval);
+          return;
+        }
+        playBalloonBurst(0.4 + Math.random() * 0.4); // Randomize slight volume for natural effect
+      }, 350); // a burst every 350ms
+
       (function phase1() {
         if (Date.now() >= phase1End) {
 
           // ── PHASE 2: Massive gold volley from both sides (the big WOW moment) ──
+          playBalloonBurst(2.0); // Big explosion sound here
           confetti({ particleCount: 100, angle: 60,  spread: 75, origin: { x: 0,   y: 0.85 }, colors: GOLD_COLORS, scalar: 1.3 });
           confetti({ particleCount: 100, angle: 120, spread: 75, origin: { x: 1,   y: 0.85 }, colors: GOLD_COLORS, scalar: 1.3 });
           confetti({ particleCount: 60,  angle: 90,  spread: 60, origin: { x: 0.5, y: 1    }, colors: GOLD_COLORS, scalar: 1.5 });
