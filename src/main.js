@@ -126,7 +126,7 @@ gsap.registerPlugin(ScrollTrigger);
 
     // Typing effect
     const typedText = document.getElementById("typed-text");
-    const message = "> Decoding the future of Information Technology...";
+    const message = "> in source, we trust...";
     let i = 0;
     function typeChar() {
       if (i < message.length) {
