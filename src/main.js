@@ -1,7 +1,6 @@
 import * as THREE from "three";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import confetti from "canvas-confetti";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -127,7 +126,7 @@ gsap.registerPlugin(ScrollTrigger);
 
     // Typing effect
     const typedText = document.getElementById("typed-text");
-    const message = "> In source, we trust.";
+    const message = "> Decoding the future of Information Technology...";
     let i = 0;
     function typeChar() {
       if (i < message.length) {
@@ -704,6 +703,7 @@ gsap.registerPlugin(ScrollTrigger);
 
       const spacing = () => (window.innerWidth <= 768 ? 132 : 190);
       let activeIndex = 0;
+      let isHovering = false;
       let touchStartX = 0;
       let touchStartY = 0;
       let isDragging = false;
@@ -711,7 +711,7 @@ gsap.registerPlugin(ScrollTrigger);
       let lastManualRotateAt = 0;
       let cycleTimerId;
       let isBusy = false;
-      const MANUAL_COOLDOWN_MS = 60;
+      const MANUAL_COOLDOWN_MS = 260;
       const VISIBLE_DEPTH = 1;
 
       function applyLayout() {
@@ -786,45 +786,65 @@ gsap.registerPlugin(ScrollTrigger);
       function memberTargets(memberCount, teamKey = "") {
         const others = Math.max(0, memberCount - 1);
         const mobile = window.innerWidth <= 768;
-        const stepX = mobile ? 108 : 210;
-        const stepY = mobile ? 24 : 34;
-        const leadY = mobile ? -10 : -18;
-        const baseY = mobile ? 24 : 34;
-        const targets = [{ x: 0, y: leadY }];
-        if (!others) {
-          return targets;
-        }
+          const leadY = mobile ? -20 : -18;
+          const targets = [{ x: 0, y: leadY }];
+          if (!others) {
+            return targets;
+          }
 
-        if (memberCount === 4 && teamKey === "social") {
-          const leadX = -(stepX * (mobile ? 0.1 : 0.14));
-          const topX = stepX * (mobile ? 0.88 : 1.04);
-          const topY = leadY + (mobile ? 2 : 4);
-          const bottomLeftX = stepX * (mobile ? 1.1 : 1.42);
-          const bottomRightX = stepX * (mobile ? 1.52 : 1.9);
-          const bottomY = baseY + stepY * (mobile ? 2.35 : 4.1);
-          return [
-            { x: leadX, y: leadY },
-            { x: topX, y: topY },
-            { x: -bottomLeftX, y: bottomY },
-            { x: bottomRightX, y: bottomY + (mobile ? 6 : 10) }
-          ];
-        }
+          if (mobile) {
+              const stepX = 78;
+              const stepY = 115;
+              for (let i = 1; i <= others; i += 1) {
+                const row = Math.ceil(i / 2);
+                const isLeft = i % 2 === 1;
+                const direction = isLeft ? -1 : 1;
+                let x = direction * stepX;
+                if (i === others && isLeft) {
+                  x = 0;
+                }
+                targets.push({
+                  x: x,
+                  y: leadY + (row * stepY) + 15
+                });
+              }
+              return targets;
+            }
 
-        if (memberCount === 6) {
-          const topX = stepX * (mobile ? 1.02 : 1.32);
-          const topY = leadY - (mobile ? 16 : 22);
-          const bottomX = stepX * (mobile ? 1.75 : 2.45);
-          const bottomY = baseY + stepY * (mobile ? 1.85 : 2.25);
-          const midY = bottomY + (mobile ? 68 : 88);
-          return [
-            { x: 0, y: leadY },
-            { x: topX, y: topY },
-            { x: -topX, y: topY },
-            { x: -bottomX, y: bottomY },
-            { x: 0, y: midY },
-            { x: bottomX, y: bottomY }
-          ];
-        }
+          const stepX = 210;
+          const stepY = 34;
+          const baseY = 34;
+
+          if (memberCount === 4 && teamKey === "social") {
+            const leadX = -(stepX * 0.14);
+            const topX = stepX * 1.04;
+            const topY = leadY + 4;
+            const bottomLeftX = stepX * 1.42;
+            const bottomRightX = stepX * 1.9;
+            const bottomY = baseY + stepY * 4.1;
+            return [
+              { x: leadX, y: leadY },
+              { x: topX, y: topY },
+              { x: -bottomLeftX, y: bottomY },
+              { x: bottomRightX, y: bottomY + 10 }
+            ];
+          }
+
+          if (memberCount === 6) {
+            const topX = stepX * 1.32;
+            const topY = leadY - 22;
+            const bottomX = stepX * 2.45;
+            const bottomY = baseY + stepY * 2.25;
+            const midY = bottomY + 88;
+            return [
+              { x: 0, y: leadY },
+              { x: topX, y: topY },
+              { x: -topX, y: topY },
+              { x: -bottomX, y: bottomY },
+              { x: 0, y: midY },
+              { x: bottomX, y: bottomY }
+            ];
+          }
 
         for (let i = 1; i <= others; i += 1) {
           const tier = Math.ceil(i / 2);
@@ -931,7 +951,7 @@ gsap.registerPlugin(ScrollTrigger);
       }
 
       async function runTeamCycle() {
-        if (isBusy || isDragging) {
+        if (isBusy || isHovering || isDragging) {
           queueCycle(280);
           return;
         }
@@ -942,6 +962,16 @@ gsap.registerPlugin(ScrollTrigger);
         isBusy = false;
         queueCycle(740);
       }
+
+      carousel.addEventListener("mouseenter", () => {
+        isHovering = true;
+        clearTimeout(cycleTimerId);
+      });
+
+      carousel.addEventListener("mouseleave", () => {
+        isHovering = false;
+        queueCycle(420);
+      });
 
       carousel.addEventListener("mousedown", (e) => {
         if (isBusy) {
@@ -1543,273 +1573,3 @@ gsap.registerPlugin(ScrollTrigger);
 
     initParticles();
   // Antelope background effect removed as requested.
-
-  // --- INAUGURATION AUDIO EFFECT (Web Audio API) ---
-  let audioCtx = null;
-  function playBalloonBurst(loudness = 1.0) {
-    if (!audioCtx) {
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    }
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-    
-    const now = audioCtx.currentTime;
-    
-    // Create white noise for the sharp "pop/burst" texture
-    const bufferSize = audioCtx.sampleRate * 0.15; // 0.15 seconds
-    const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-    const output = noiseBuffer.getChannelData(0);
-    for (let i = 0; i < bufferSize; i++) {
-        output[i] = Math.random() * 2 - 1;
-    }
-    
-    const noise = audioCtx.createBufferSource();
-    noise.buffer = noiseBuffer;
-    
-    const filter = audioCtx.createBiquadFilter();
-    filter.type = 'highpass';
-    filter.frequency.value = 1000;
-    
-    const noiseGain = audioCtx.createGain();
-    noiseGain.gain.setValueAtTime(0, now);
-    noiseGain.gain.linearRampToValueAtTime(loudness * 2.0, now + 0.01);
-    noiseGain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
-    
-    noise.connect(filter);
-    filter.connect(noiseGain);
-    noiseGain.connect(audioCtx.destination);
-    
-    noise.start(now);
-    noise.stop(now + 0.15);
-    
-    // Add the deep "thud/punch" body of the balloon bursting
-    const osc = audioCtx.createOscillator();
-    const oscGain = audioCtx.createGain();
-    osc.type = 'sine';
-    
-    // Pitch drops from mid to sub very fast
-    osc.frequency.setValueAtTime(250 + Math.random() * 100, now);
-    osc.frequency.exponentialRampToValueAtTime(40, now + 0.1);
-    
-    oscGain.gain.setValueAtTime(0, now);
-    oscGain.gain.linearRampToValueAtTime(loudness * 2.5, now + 0.01);
-    oscGain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
-    
-    osc.connect(oscGain);
-    oscGain.connect(audioCtx.destination);
-    
-    osc.start(now);
-    osc.stop(now + 0.15);
-  }
-
-  function playTickSound() {
-    if (!audioCtx) {
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    }
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-
-    const osc = audioCtx.createOscillator();
-    const gainNode = audioCtx.createGain();
-    
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(1000, audioCtx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
-    
-    gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
-    gainNode.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime + 0.01);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
-    
-    osc.connect(gainNode);
-    gainNode.connect(audioCtx.destination);
-    
-    osc.start();
-    osc.stop(audioCtx.currentTime + 0.1);
-  }
-
-  // --- INAUGURATION SECRET PROTOCOL ---
-  function initInauguration() {
-    const launchDate = new Date("2026-04-11T17:00:00+05:30").getTime();
-    let overrideTime = null;
-    let hasRevealed = false;
-    let inClimax = false;
-    let lastSecond = -1;
-
-    const timerNumbers  = document.getElementById("timer-numbers");
-    const panelLeft     = document.getElementById("panel-left");
-    const panelRight    = document.getElementById("panel-right");
-    const revealContent = document.getElementById("reveal-content");
-    const timerDisplay  = document.getElementById("inauguration-timer");
-    const climaxOverlay = document.getElementById("climax-overlay");
-    const climaxNumber  = document.getElementById("climax-number");
-    const inauSection   = document.getElementById("inauguration");
-
-    if (!timerNumbers || !panelLeft || !panelRight || !revealContent) return;
-
-    function formatTime(t) {
-      if (t < 0) return "00:00:00:00";
-      const d = Math.floor(t / 86400000);
-      const h = Math.floor((t / 3600000) % 24);
-      const m = Math.floor((t / 60000) % 60);
-      const s = Math.floor((t / 1000) % 60);
-      return `${String(d).padStart(2,"0")}:${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
-    }
-
-    function beatNumber(n) {
-      if (!climaxNumber) return;
-      
-      // Play a tick for every number in the countdown climax (1 to 10)
-      if (n > 0 && n <= 10) {
-        playTickSound();
-      }
-
-      climaxNumber.textContent = String(n);
-      climaxNumber.classList.remove("beat");
-      void climaxNumber.offsetWidth;
-      climaxNumber.classList.add("beat");
-    }
-
-    function startClimax() {
-      if (inClimax) return;
-      inClimax = true;
-      gsap.to(timerDisplay, { opacity: 0, duration: 0.45, ease: "power2.inOut" });
-      if (inauSection) gsap.to(inauSection, { backgroundColor: "rgba(2,6,14,0.95)", duration: 1.2, ease: "power2.inOut" });
-      if (climaxOverlay) climaxOverlay.classList.add("active");
-    }
-
-    function triggerReveal() {
-      if (hasRevealed) return;
-      hasRevealed = true;
-
-      beatNumber(0);
-      playBalloonBurst(1.5); // A loud burst directly on 0
-
-      setTimeout(() => {
-        if (climaxOverlay) climaxOverlay.classList.remove("active");
-
-        const tl = gsap.timeline();
-
-        if (inauSection) tl.to(inauSection, { backgroundColor: "transparent", duration: 1.5, ease: "power2.inOut" }, 0);
-
-        tl.to(panelLeft,  { x: "-100%", duration: 2.4, ease: "power3.inOut" }, 0.3);
-        tl.to(panelRight, { x:  "100%", duration: 2.4, ease: "power3.inOut" }, 0.3);
-
-        tl.to(revealContent, { opacity: 1, scale: 1, duration: 1.8, ease: "expo.out" }, 1.2);
-
-        tl.fromTo(".reveal-subtitle",
-          { opacity: 0, letterSpacing: "12px" },
-          { opacity: 1, letterSpacing: "5px", duration: 1, ease: "power2.out" },
-          2.2
-        );
-        tl.fromTo(".reveal-tagline",
-          { opacity: 0, y: 8 },
-          { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" },
-          2.8
-        );
-
-        tl.add(fireConfetti, 0.8);
-
-      }, 1200);
-    }
-
-    function fireConfetti() {
-      const GOLD_COLORS  = ["#FFD700", "#C9972A", "#FFFFFF", "#FFF8DC"];
-      const PARTY_COLORS = ["#FF3B3B", "#FF9F00", "#FFD700", "#00C851", "#007BFF", "#C200FB", "#FF6B9D"];
-
-      // ── PHASE 1: Colorful party confetti burst for 9 seconds ──
-      const phase1End = Date.now() + 9000;
-      
-      // We use setInterval for the popping sound during phase 1, so it pops periodically 
-      // without overwhelming the user or browser
-      const burstingInterval = setInterval(() => {
-        if (Date.now() >= phase1End) {
-          clearInterval(burstingInterval);
-          return;
-        }
-        playBalloonBurst(0.4 + Math.random() * 0.4); // Randomize slight volume for natural effect
-      }, 350); // a burst every 350ms
-
-      (function phase1() {
-        if (Date.now() >= phase1End) {
-
-          // ── PHASE 2: Massive gold volley from both sides (the big WOW moment) ──
-          playBalloonBurst(2.0); // Big explosion sound here
-          confetti({ particleCount: 100, angle: 60,  spread: 75, origin: { x: 0,   y: 0.85 }, colors: GOLD_COLORS, scalar: 1.3 });
-          confetti({ particleCount: 100, angle: 120, spread: 75, origin: { x: 1,   y: 0.85 }, colors: GOLD_COLORS, scalar: 1.3 });
-          confetti({ particleCount: 60,  angle: 90,  spread: 60, origin: { x: 0.5, y: 1    }, colors: GOLD_COLORS, scalar: 1.5 });
-
-          // Sustained gold shower after the big volley for 7 more seconds
-          const phase2End = Date.now() + 7000;
-          (function phase2Sustain() {
-            if (Date.now() >= phase2End) return;
-            confetti({ particleCount: 6, angle: 60,  spread: 60, origin: { x: 0,   y: 0.85 }, colors: GOLD_COLORS });
-            confetti({ particleCount: 6, angle: 120, spread: 60, origin: { x: 1,   y: 0.85 }, colors: GOLD_COLORS });
-            confetti({ particleCount: 4, angle: 90,  spread: 50, origin: { x: 0.5, y: 1    }, colors: GOLD_COLORS });
-            requestAnimationFrame(phase2Sustain);
-          }());
-
-          return;
-        }
-
-        // Phase 1: Colorful party confetti pieces from both sides
-        confetti({
-          particleCount: 5,
-          angle: 60,
-          spread: 55,
-          origin: { x: 0, y: 0.8 },
-          colors: PARTY_COLORS,
-          shapes: ["circle", "square"],
-          scalar: 0.9
-        });
-        confetti({
-          particleCount: 5,
-          angle: 120,
-          spread: 55,
-          origin: { x: 1, y: 0.8 },
-          colors: PARTY_COLORS,
-          shapes: ["circle", "square"],
-          scalar: 0.9
-        });
-        requestAnimationFrame(phase1);
-      }());
-    }
-
-
-
-    const interval = setInterval(() => {
-      if (hasRevealed) { clearInterval(interval); return; }
-      const diff    = (overrideTime !== null ? overrideTime : launchDate) - Date.now();
-      const secLeft = Math.ceil(diff / 1000);
-
-      if (diff <= 10000 && diff > 0) {
-        if (!inClimax) startClimax();
-        if (secLeft !== lastSecond) { lastSecond = secLeft; beatNumber(secLeft); }
-      } else {
-        timerNumbers.textContent = formatTime(diff);
-      }
-
-      if (diff <= 0) triggerReveal();
-    }, 200);
-
-    timerNumbers.textContent = formatTime((overrideTime !== null ? overrideTime : launchDate) - Date.now());
-
-    window.addEventListener("keydown", (e) => {
-      if (e.shiftKey && (e.key === "I" || e.key === "i")) {
-        hasRevealed = false;
-        inClimax    = false;
-        lastSecond  = -1;
-        if (climaxOverlay) climaxOverlay.classList.remove("active");
-        gsap.set(panelLeft,     { x: "0%" });
-        gsap.set(panelRight,    { x: "0%" });
-        gsap.set(revealContent, { opacity: 0, scale: 0.88 });
-        gsap.set(timerDisplay,  { opacity: 1 });
-
-        const targetSection = document.getElementById("inauguration");
-        if (targetSection) {
-          const navH = document.getElementById("navbar")?.offsetHeight || 0;
-          window.scrollTo({ top: targetSection.getBoundingClientRect().top + window.scrollY - navH - 18, behavior: "smooth" });
-        }
-        overrideTime = Date.now() + 13500;
-      }
-    });
-  }
-
-  initInauguration();
