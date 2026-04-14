@@ -793,8 +793,8 @@ gsap.registerPlugin(ScrollTrigger);
           }
 
           if (mobile) {
-              const stepX = 78;
-              const stepY = 115;
+              const stepX = 90;
+              const stepY = 175;
               for (let i = 1; i <= others; i += 1) {
                 const row = Math.ceil(i / 2);
                 const isLeft = i % 2 === 1;
@@ -908,12 +908,16 @@ gsap.registerPlugin(ScrollTrigger);
 
         await new Promise((resolve) => {
           gsap.fromTo(memberCards, {
+            xPercent: -50,
+            yPercent: -50,
             x: 0,
             y: 0,
             scale: 0.28,
             opacity: 0,
             rotateY: -90
           }, {
+            xPercent: -50,
+            yPercent: -50,
             x: (idx) => targets[idx].x,
             y: (idx) => targets[idx].y,
             scale: (idx) => (idx === 0 ? 1.04 : 0.92),
@@ -930,6 +934,8 @@ gsap.registerPlugin(ScrollTrigger);
 
         await new Promise((resolve) => {
           gsap.to(memberCards, {
+            xPercent: -50,
+            yPercent: -50,
             x: 0,
             y: 0,
             scale: 0.24,
