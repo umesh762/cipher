@@ -2805,7 +2805,7 @@
       }
 
       .scroll-indicator {
-        bottom: 1.25rem;
+        position: relative; margin-top: 2rem; bottom: auto; left: auto; transform: none;
       }
 
       .hero-badge {
